@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Floor Plan — BuildView 3D</title>
+    <meta name="description" content="Upload your 2D floor plan to generate an interactive 3D house model.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/upload.css">
+</head>
+<body>
+
+<!-- ============================================================
+     TOP NAVIGATION BAR
+     ============================================================ -->
+<nav class="top-nav">
+    <a href="index.html" class="top-nav-logo">
+        <span class="gradient-text">BuildView 3D</span>
+    </a>
+    <div class="top-nav-right">
+        <a href="dashboard.html" class="nav-back-link">← Back to Dashboard</a>
+        <div class="user-info">
+            <div class="user-avatar" id="user-avatar">?</div>
+            <div class="user-name" id="user-name">Loading...</div>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main class="upload-main">
+
+    <!-- Page Header -->
+    <div class="upload-header">
+        <h1 class="upload-title">Upload Your Floor Plan</h1>
+        <p class="upload-subtitle">
+            Upload a JPG, PNG, or PDF file. Our AI will analyze it and generate your 3D model.
+        </p>
+    </div>
+
+    <!-- --------------------------------------------------------
+         STEP INDICATOR
+         -------------------------------------------------------- -->
+    <div class="steps-indicator">
+        <div class="step active">
+            <div class="step-number">1</div>
+            <div class="step-label">Name Project</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" id="step-2-indicator">
+            <div class="step-number">2</div>
+            <div class="step-label">Upload File</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" id="step-3-indicator">
+            <div class="step-number">3</div>
+            <div class="step-label">AI Analysis</div>
+        </div>
+    </div>
+
+    <!-- --------------------------------------------------------
+         STEP 1: CREATE PROJECT (name + description)
+         -------------------------------------------------------- -->
+    <section id="step-1" class="upload-card">
+        <h2 class="upload-card-title">Step 1: Name Your Project</h2>
+        <p class="upload-card-desc">Give your project a name so you can find it later on your dashboard.</p>
+
+        <form id="project-form" class="project-form">
+            <!-- Project Name -->
+            <div class="form-group">
+                <label for="project-name" class="form-label">Project Name <span class="required">*</span></label>
+                <input
+                    type="text"
+                    id="project-name"
+                    class="form-input"
+                    placeholder="e.g. My Family Home, Holiday Cottage, Office Renovation..."
+                    maxlength="100"
+                    required
+                />
+                <div class="char-count"><span id="name-count">0</span>/100</div>
+            </div>
+
+            <!-- Description (optional) -->
+            <div class="form-group">
+                <label for="project-desc" class="form-label">Description <span class="optional">(optional)</span></label>
+                <textarea
+                    id="project-desc"
+                    class="form-textarea"
+                    placeholder="Add any notes about this project — location, size, special requirements..."
+                    rows="3"
+                    maxlength="500"
+                ></textarea>
+                <div class="char-count"><span id="desc-count">0</span>/500</div>
+            </div>
+
+            <!-- Error message -->
+            <div id="project-error" class="error-message" style="display:none;"></div>
+
+            <!-- Next button -->
+            <button type="submit" id="create-project-btn" class="btn-primary">
+                Continue to Upload →
+            </button>
+        </form>
+    </section>
+
+    <!-- --------------------------------------------------------
+         STEP 2: FILE UPLOAD (shown after project is created)
+         -------------------------------------------------------- -->
+    <section id="step-2" class="upload-card" style="display:none;">
+        <h2 class="upload-card-title">Step 2: Upload Floor Plan</h2>
+        <p class="upload-card-desc">
+            Supported formats: <strong>JPG, PNG, PDF</strong> — Maximum file size: <strong>20 MB</strong>
+        </p>
+
+        <!-- Hidden project ID (set after project is created) -->
+        <input type="hidden" id="project-id" value="">
+
+        <!-- ---- Drag & Drop Zone ---- -->
+        <div
+            id="drop-zone"
+            class="drop-zone"
+            role="button"
+            tabindex="0"
+            aria-label="Upload floor plan file"
+        >
+            <div class="drop-zone-icon">🏠</div>
+            <div class="drop-zone-text">
+                <strong>Drag & drop your floor plan here</strong>
+                <span>or</span>
+                <label for="file-input" class="file-browse-btn">Browse Files</label>
+            </div>
+            <div class="drop-zone-hint">JPG · PNG · PDF — up to 20 MB</div>
+            <input
+                type="file"
+                id="file-input"
+                class="file-input-hidden"
+                accept=".jpg,.jpeg,.png,.pdf"
+                aria-hidden="true"
+            />
+        </div>
+
+        <!-- ---- File Preview (shown after file selected) ---- -->
+        <div id="file-preview" class="file-preview" style="display:none;">
+            <div class="file-preview-info">
+                <div class="file-icon" id="file-icon">📄</div>
+                <div class="file-details">
+                    <div class="file-name" id="file-name">filename.png</div>
+                    <div class="file-size" id="file-size">0 KB</div>
+                </div>
+                <button class="file-remove-btn" id="file-remove-btn" title="Remove file">✕</button>
+            </div>
+            <!-- Image preview thumbnail -->
+            <div id="image-preview-container" class="image-preview-container" style="display:none;">
+                <img id="image-preview" class="image-preview-thumb" alt="Floor plan preview" />
+            </div>
+        </div>
+
+        <!-- ---- Upload Progress ---- -->
+        <div id="upload-progress" class="upload-progress" style="display:none;">
+            <div class="progress-label">
+                <span id="progress-text">Uploading...</span>
+                <span id="progress-pct">0%</span>
+            </div>
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progress-bar-fill" style="width:0%"></div>
+            </div>
+        </div>
+
+        <!-- ---- Error message ---- -->
+        <div id="upload-error" class="error-message" style="display:none;"></div>
+
+        <!-- ---- Upload Button ---- -->
+        <div class="upload-actions">
+            <button id="upload-btn" class="btn-primary" disabled>
+                🚀 Upload & Analyze Floor Plan
+            </button>
+            <p class="upload-note">
+                After uploading, our AI will analyze your floor plan and generate a 3D model.
+                This usually takes 15–60 seconds.
+            </p>
+        </div>
+    </section>
+
+    <!-- --------------------------------------------------------
+         STEP 3: SUCCESS / REDIRECT TO PROCESSING
+         -------------------------------------------------------- -->
+    <section id="step-3" class="upload-card" style="display:none;">
+        <div class="success-state">
+            <div class="success-icon">✅</div>
+            <h2 class="success-title">Floor Plan Uploaded!</h2>
+            <p class="success-desc">
+                Your floor plan has been received. AI analysis is starting now...
+            </p>
+            <div class="success-spinner">
+                <div class="spinner"></div>
+                <span>Redirecting to processing view...</span>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/upload.js"></script>
+
+</body>
+</html>
+

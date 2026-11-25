@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing — BuildView 3D</title>
+    <meta name="description" content="AI is analyzing your floor plan to generate a 3D model.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+        /* -------------------------------------------------- */
+        /* Page Layout                                         */
+        /* -------------------------------------------------- */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--bg-primary, #0a0a0a);
+            color: var(--text-primary, #fff);
+        }
+
+        /* -------------------------------------------------- */
+        /* Icon                                                */
+        /* -------------------------------------------------- */
+        .processing-icon {
+            font-size: 5rem;
+            margin-bottom: 24px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        /* -------------------------------------------------- */
+        /* Title + Description                                 */
+        /* -------------------------------------------------- */
+        .processing-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .processing-desc {
+            color: var(--text-secondary, #9ca3af);
+            font-size: 1rem;
+            max-width: 460px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* -------------------------------------------------- */
+        /* Progress Bar                                        */
+        /* -------------------------------------------------- */
+        .progress-wrapper {
+            width: 100%;
+            max-width: 440px;
+            margin-bottom: 8px;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary, #9ca3af);
+        }
+        .progress-pct {
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #3b82f6, #7c3aed);
+            width: 10%;
+            transition: width 0.6s ease;
+        }
+        .stage-label {
+            margin-top: 10px;
+            font-size: 0.82rem;
+            color: #6b7280;
+            min-height: 1.2em;
+        }
+
+        /* -------------------------------------------------- */
+        /* Stage dots (decorative)                            */
+        /* -------------------------------------------------- */
+        .stage-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .stage-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            transition: background 0.4s;
+        }
+        .stage-dot.active  { background: #3b82f6; }
+        .stage-dot.done    { background: #10b981; }
+
+        /* -------------------------------------------------- */
+        /* Error box                                          */
+        /* -------------------------------------------------- */
+        .error-box {
+            margin-top: 24px;
+            max-width: 460px;
+            width: 100%;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 12px;
+            padding: 20px 24px;
+            text-align: left;
+        }
+        .error-box.hidden { display: none; }
+        .error-title {
+            color: #f87171;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .error-msg {
+            color: #fca5a5;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .retry-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .retry-btn:hover { background: #dc2626; }
+
+        /* -------------------------------------------------- */
+        /* Back link                                          */
+        /* -------------------------------------------------- */
+        .back-link {
+            margin-top: 32px;
+            color: var(--text-secondary, #9ca3af);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: #3b82f6; }
+    </style>
+</head>
+<body>
+
+    <!-- Animated icon -->
+    <div class="processing-icon">🔬</div>
+
+    <!-- Title and description (updated by JS) -->
+    <h1 class="processing-title" id="status-title">AI Analysis in Progress</h1>
+    <p class="processing-desc" id="status-desc">
+        Our AI is analyzing your floor plan to detect walls, rooms,
+        doors, windows, and staircases. This usually takes 10–30 seconds.
+    </p>
+
+    <!-- Progress bar -->
+    <div class="progress-wrapper">
+        <div class="progress-header">
+            <span id="stage-label">Starting analysis…</span>
+            <span class="progress-pct" id="progress-pct">0%</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- Decorative stage dots (9 stages) -->
+    <div class="stage-dots" id="stage-dots">
+        <div class="stage-dot active" id="dot-0"></div>
+        <div class="stage-dot" id="dot-1"></div>
+        <div class="stage-dot" id="dot-2"></div>
+        <div class="stage-dot" id="dot-3"></div>
+        <div class="stage-dot" id="dot-4"></div>
+        <div class="stage-dot" id="dot-5"></div>
+        <div class="stage-dot" id="dot-6"></div>
+        <div class="stage-dot" id="dot-7"></div>
+        <div class="stage-dot" id="dot-8"></div>
+    </div>
+
+    <!-- Error panel (hidden by default, shown on failure) -->
+    <div class="error-box hidden" id="error-box">
+        <div class="error-title">⚠ Analysis Error</div>
+        <div class="error-msg" id="error-msg"></div>
+        <button class="retry-btn" id="retry-btn">↺ Try Again</button>
+    </div>
+
+    <!-- Back to dashboard link -->
+    <a href="dashboard.html" class="back-link">← Return to Dashboard</a>
+
+    <!-- Auth helpers (needed for isAuthenticated) -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+
+    <!-- Processing logic -->
+    <script src="js/processing.js"></script>
+
+    <!-- Update stage dots to stay in sync with progress -->
+    <script>
+        // Hook into setProgress to update dots
+        const _origSetProgress = typeof setProgress !== 'undefined' ? setProgress : null;
+
+        // Poll and update dots based on currentStageIndex
+        setInterval(() => {
+            if (typeof currentStageIndex === 'undefined') return;
+            for (let i = 0; i < 9; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (!dot) continue;
+                if (i < currentStageIndex) {
+                    dot.className = 'stage-dot done';
+                } else if (i === currentStageIndex) {
+                    dot.className = 'stage-dot active';
+                } else {
+                    dot.className = 'stage-dot';
+                }
+            }
+        }, 500);
+    </script>
+
+</body>
+</html>

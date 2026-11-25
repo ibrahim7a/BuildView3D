@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildView 3D — See Your Home Before It's Built</title>
+    <meta name="description" content="Transform your 2D floor plans into interactive 3D models powered by AI. See every room, wall, and window before construction begins.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/landing.css">
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00d4aa',
+                        secondary: '#0066cc',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION BAR
+     Fixed to the top — blurs on scroll via JavaScript.
+     ============================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container navbar-inner">
+        <!-- Logo -->
+        <a href="#" class="navbar-logo">
+            <span class="gradient-text">BuildView 3D</span>
+        </a>
+
+        <!-- Navigation Links -->
+        <ul class="navbar-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+
+        <!-- Action Buttons -->
+        <div class="navbar-actions">
+            <a href="login.html" class="btn-login">Log In</a>
+            <a href="register.html" class="btn-primary" style="padding: 10px 24px; font-size: 0.875rem;">Start Free</a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+    </div>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     The first thing visitors see — headline, CTA, and visual.
+     ============================================================ -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-inner">
+
+            <!-- Left: Text Content -->
+            <div class="hero-content">
+                <!-- AI Badge -->
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    AI-Powered &nbsp;·&nbsp; Trusted by 500+ Builders
+                </div>
+
+                <!-- Main Headline -->
+                <h1 class="hero-title">
+                    See Your Home<br>
+                    <span class="gradient-text">Before It's Built</span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="hero-subtitle">
+                    Upload your 2D floor plan and BuildView 3D transforms it into a fully interactive 3D model in minutes.
+                    Walk through every room, customise the interior, and share it with anyone — before a single brick is laid.
+                </p>
+
+                <!-- Call to Action Buttons -->
+                <div class="hero-cta">
+                    <a href="register.html" class="btn-primary">
+                        🚀 Start For Free
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">
+                        ▶ How It Works
+                    </a>
+                </div>
+
+                <!-- Social Proof Stats -->
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="number">500+</span>
+                        <span class="label">Builders</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="number">2,400+</span>
+                        <span class="label">Floor Plans</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="number">&lt;5 min</span>
+                        <span class="label">To 3D Model</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: House Visual -->
+            <div class="hero-visual">
+                <div class="house-container">
+                    <!-- Rotating glow ring -->
+                    <div class="house-glow"></div>
+
+                    <!-- SVG Wireframe House -->
+                    <svg class="house-svg" width="280" height="260" viewBox="0 0 280 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Roof (triangle outline) -->
+                        <polygon points="140,20 260,100 20,100" stroke="#00d4aa" stroke-width="2" fill="rgba(0,212,170,0.05)" stroke-linejoin="round"/>
+
+                        <!-- House body -->
+                        <rect x="40" y="100" width="200" height="140" stroke="#00d4aa" stroke-width="2" fill="rgba(0,102,204,0.05)" rx="2"/>
+
+                        <!-- Front door -->
+                        <rect x="110" y="175" width="40" height="65" stroke="#0066cc" stroke-width="2" fill="rgba(0,102,204,0.1)" rx="2"/>
+                        <!-- Door knob -->
+                        <circle cx="118" cy="210" r="3" fill="#0066cc"/>
+
+                        <!-- Left window -->
+                        <rect x="58" y="125" width="45" height="40" stroke="#00d4aa" stroke-width="1.5" fill="rgba(0,212,170,0.08)" rx="2"/>
+                        <!-- Window cross -->
+                        <line x1="80" y1="125" x2="80" y2="165" stroke="#00d4aa" stroke-width="1" opacity="0.6"/>
+                        <line x1="58" y1="145" x2="103" y2="145" stroke="#00d4aa" stroke-width="1" opacity="0.6"/>
+
+                        <!-- Right window -->
+                        <rect x="177" y="125" width="45" height="40" stroke="#00d4aa" stroke-width="1.5" fill="rgba(0,212,170,0.08)" rx="2"/>
+                        <!-- Window cross -->
+                        <line x1="199" y1="125" x2="199" y2="165" stroke="#00d4aa" stroke-width="1" opacity="0.6"/>
+                        <line x1="177" y1="145" x2="222" y2="145" stroke="#00d4aa" stroke-width="1" opacity="0.6"/>
+
+                        <!-- Chimney -->
+                        <rect x="195" y="30" width="22" height="45" stroke="#00b894" stroke-width="1.5" fill="rgba(0,184,148,0.08)"/>
+
+                        <!-- 3D depth lines (perspective) -->
+                        <line x1="40"  y1="100" x2="20"  y2="120" stroke="#0066cc" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="240" y1="100" x2="260" y2="120" stroke="#0066cc" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="40"  y1="240" x2="20"  y2="260" stroke="#0066cc" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="240" y1="240" x2="260" y2="260" stroke="#0066cc" stroke-width="1.5" opacity="0.5"/>
+
+                        <!-- Bottom depth face -->
+                        <line x1="20"  y1="260" x2="260" y2="260" stroke="#0066cc" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="20"  y1="120" x2="20"  y2="260" stroke="#0066cc" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="260" y1="120" x2="260" y2="260" stroke="#0066cc" stroke-width="1.5" opacity="0.5"/>
+
+                        <!-- Grid pattern on ground (perspective) -->
+                        <line x1="20" y1="260" x2="40"  y2="240" stroke="#1e2d3d" stroke-width="1"/>
+                        <line x1="80" y1="260" x2="96"  y2="240" stroke="#1e2d3d" stroke-width="1"/>
+                        <line x1="140" y1="260" x2="152" y2="240" stroke="#1e2d3d" stroke-width="1"/>
+                        <line x1="200" y1="260" x2="208" y2="240" stroke="#1e2d3d" stroke-width="1"/>
+
+                        <!-- Roof depth lines -->
+                        <line x1="140" y1="20"  x2="120" y2="40"  stroke="#00b894" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="260" y1="100" x2="240" y2="120" stroke="#00b894" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="120" y1="40"  x2="0"   y2="120" stroke="#00b894" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="0"   y1="120" x2="20"  y2="120" stroke="#00b894" stroke-width="1.5" opacity="0.5"/>
+
+                        <!-- Glowing dots at corners -->
+                        <circle cx="140" cy="20"  r="4" fill="#00d4aa" opacity="0.8"/>
+                        <circle cx="260" cy="100" r="4" fill="#00d4aa" opacity="0.8"/>
+                        <circle cx="20"  cy="100" r="4" fill="#00d4aa" opacity="0.8"/>
+                        <circle cx="40"  cy="240" r="3" fill="#0066cc" opacity="0.6"/>
+                        <circle cx="240" cy="240" r="3" fill="#0066cc" opacity="0.6"/>
+                    </svg>
+
+                    <!-- Floating card: Floor Plan -->
+                    <div class="floorplan-card">
+                        <div class="floor-label">📐 Floor Plan</div>
+                        <div style="width: 80px; height: 60px; border: 1px solid #1e2d3d; border-radius: 4px; padding: 4px; margin-top: 6px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; height: 100%;">
+                                <div style="background: rgba(0,212,170,0.2); border-radius: 2px;"></div>
+                                <div style="background: rgba(0,102,204,0.2); border-radius: 2px;"></div>
+                                <div style="background: rgba(0,102,204,0.15); border-radius: 2px;"></div>
+                                <div style="background: rgba(0,212,170,0.1); border-radius: 2px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating card: 3D Model -->
+                    <div class="model-card">
+                        <div class="model-label">✨ 3D Model Ready</div>
+                        <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 4px;">
+                            Walls: 12 detected<br>
+                            Rooms: 4 identified<br>
+                            Scale: 1px = 0.05m
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     FEATURES SECTION
+     Six feature cards in a 3-column grid.
+     ============================================================ -->
+<section class="section" id="features">
+    <div class="container">
+        <div class="section-header">
+            <h2>Everything You Need to <span class="gradient-text">Visualise Your Home</span></h2>
+            <p>From floor plan upload to virtual walkthrough — all in one platform.</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <span class="feature-icon">🏗️</span>
+                <h3>Instant 3D Generation</h3>
+                <p>Upload your 2D floor plan and watch it transform into a full 3D model in minutes. No design experience required.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                <span class="feature-icon">🚶</span>
+                <h3>Virtual Walkthrough</h3>
+                <p>Walk through every room before construction begins. Available on desktop, mobile, and Meta Quest VR.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card">
+                <span class="feature-icon">🎨</span>
+                <h3>Interior Customisation</h3>
+                <p>Change walls, floors, furniture, and lighting. Try different styles instantly and see changes in real-time.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature-card">
+                <span class="feature-icon">📐</span>
+                <h3>Smart AI Detection</h3>
+                <p>Our AI reads your floor plan, identifies every room, wall, door, and window automatically — with metric measurements.</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="feature-card">
+                <span class="feature-icon">🔗</span>
+                <h3>Easy Sharing</h3>
+                <p>Share a link with clients or family. No login required to view — just send the link and they can explore immediately.</p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <h3>Works Everywhere</h3>
+                <p>Desktop, mobile browser, and Meta Quest VR — one platform, every device. Access your projects from anywhere.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS SECTION
+     Four numbered steps showing the process.
+     ============================================================ -->
+<section class="section" id="how-it-works" style="background: rgba(26,34,52,0.4);">
+    <div class="container">
+        <div class="section-header">
+            <h2>From Floor Plan to <span class="gradient-text">3D Model in 4 Steps</span></h2>
+            <p>Our AI-powered process makes it simple. No technical skills needed.</p>
+        </div>
+
+        <div class="steps-grid">
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Upload Your Floor Plan</h3>
+                <p>Drop your JPG, PNG, or PDF floor plan into BuildView 3D. We accept any format from any architect.</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>AI Analyses It</h3>
+                <p>Our AI detects every room, wall, door, and window automatically. If the scale is missing, we ask for one known measurement.</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>3D Model Generated</h3>
+                <p>A fully interactive 3D house is built from your floor plan in minutes, with 2.7m ceiling heights and metric dimensions.</p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3>Explore &amp; Customise</h3>
+                <p>Walk through, customise the interior, and share with anyone via a simple link. No login required to view.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     TARGET USERS SECTION
+     Two cards: Builders and Homeowners
+     ============================================================ -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Built for <span class="gradient-text">Builders &amp; Homeowners</span></h2>
+            <p>Whether you're a professional builder or planning your dream home, BuildView 3D works for you.</p>
+        </div>
+
+        <div class="users-grid">
+            <!-- Builders Card -->
+            <div class="user-card featured">
+                <span class="user-card-icon">🏗️</span>
+                <h3>Builders &amp; Architects</h3>
+                <ul class="user-features">
+                    <li>Upload unlimited client floor plans</li>
+                    <li>Share interactive 3D models with clients</li>
+                    <li>Reduce change orders with pre-build visualisation</li>
+                    <li>Client portal for self-service walkthroughs</li>
+                    <li>Team accounts with multi-user access</li>
+                    <li>Priority support and faster AI processing</li>
+                </ul>
+            </div>
+
+            <!-- Homeowners Card -->
+            <div class="user-card">
+                <span class="user-card-icon">🏠</span>
+                <h3>Homeowners</h3>
+                <ul class="user-features">
+                    <li>Visualise your home before construction starts</li>
+                    <li>Try different interior styles and layouts</li>
+                    <li>Share the 3D model with family and friends</li>
+                    <li>Walk through on any device or Meta Quest VR</li>
+                    <li>No technical skills required</li>
+                    <li>Start for free — no credit card needed</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     PRICING SECTION
+     Three pricing tiers.
+     ============================================================ -->
+<section class="section" id="pricing" style="background: rgba(26,34,52,0.4);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Simple, Transparent <span class="gradient-text">Pricing</span></h2>
+            <p>Start for free and upgrade when you're ready. No hidden fees.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Tier -->
+            <div class="pricing-card">
+                <div class="pricing-tier">Free</div>
+                <div class="pricing-price">$0</div>
+                <div class="pricing-period">forever free</div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> 1 project</li>
+                    <li><span class="check">✓</span> Basic 3D view</li>
+                    <li><span class="check">✓</span> Share link</li>
+                    <li><span class="cross">✗</span> <span style="opacity:0.5">VR walkthrough</span></li>
+                    <li><span class="cross">✗</span> <span style="opacity:0.5">Interior customisation</span></li>
+                    <li><span class="cross">✗</span> <span style="opacity:0.5">Remove watermark</span></li>
+                </ul>
+                <a href="register.html" class="btn-secondary pricing-cta" style="border-radius:8px;">Get Started Free</a>
+            </div>
+
+            <!-- Pro Tier -->
+            <div class="pricing-card popular">
+                <div class="pricing-tier">Pro</div>
+                <div class="pricing-price"><sup>$</sup>29</div>
+                <div class="pricing-period">per month, billed monthly</div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Unlimited projects</li>
+                    <li><span class="check">✓</span> Full 3D view</li>
+                    <li><span class="check">✓</span> VR walkthrough</li>
+                    <li><span class="check">✓</span> Interior customisation</li>
+                    <li><span class="check">✓</span> Public share links</li>
+                    <li><span class="check">✓</span> No watermark</li>
+                </ul>
+                <a href="register.html" class="btn-primary pricing-cta" style="border-radius:8px;">Start Pro</a>
+            </div>
+
+            <!-- Business Tier -->
+            <div class="pricing-card">
+                <div class="pricing-tier">Business</div>
+                <div class="pricing-price"><sup>$</sup>99</div>
+                <div class="pricing-period">per month, billed monthly</div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Everything in Pro</li>
+                    <li><span class="check">✓</span> Team accounts (5 users)</li>
+                    <li><span class="check">✓</span> Client portal</li>
+                    <li><span class="check">✓</span> Priority support</li>
+                    <li><span class="check">✓</span> Custom branding</li>
+                    <li><span class="check">✓</span> Advanced analytics</li>
+                </ul>
+                <a href="register.html" class="btn-secondary pricing-cta" style="border-radius:8px;">Contact Sales</a>
+            </div>
+        </div>
+
+        <!-- Beta note -->
+        <div class="beta-note">
+            🎉 <strong>Currently free during beta</strong> — Sign up now and get Pro features at no cost while we're in beta!
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-inner">
+            <!-- Brand -->
+            <div class="footer-brand">
+                <span class="logo gradient-text">BuildView 3D</span>
+                <p>Transform your 2D floor plans into stunning interactive 3D models. See your home before it's built.</p>
+            </div>
+
+            <!-- Product Links -->
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="register.html">Sign Up Free</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal Links -->
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <span>© 2024 BuildView 3D. All rights reserved.</span>
+            <span>Built with ❤️ for builders and homeowners</span>
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+    // ----------------------------------------------------------
+    // Navbar: Add blur effect when user scrolls down
+    // ----------------------------------------------------------
+    const navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // ----------------------------------------------------------
+    // Smooth scroll for anchor links in the navbar
+    // ----------------------------------------------------------
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(event) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+                event.preventDefault();
+                const navHeight = navbar.offsetHeight;
+                const targetPos = targetEl.getBoundingClientRect().top + window.scrollY - navHeight;
+                window.scrollTo({ top: targetPos, behavior: 'smooth' });
+            }
+        });
+    });
+
+    // ----------------------------------------------------------
+    // Mobile nav toggle (shows/hides the navbar links on mobile)
+    // ----------------------------------------------------------
+    const navToggle = document.getElementById('nav-toggle');
+    const navLinks  = document.querySelector('.navbar-links');
+
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function() {
+            const isVisible = navLinks.style.display === 'flex';
+            navLinks.style.display = isVisible ? 'none' : 'flex';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '64px';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.background = 'rgba(10,14,26,0.98)';
+            navLinks.style.padding = '16px 24px';
+            navLinks.style.borderBottom = '1px solid #1e2d3d';
+        });
+    }
+
+    // ----------------------------------------------------------
+    // Scroll-reveal animation for feature cards
+    // Cards fade in as you scroll down to them.
+    // ----------------------------------------------------------
+    const observer = new IntersectionObserver(
+        function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        },
+        { threshold: 0.1 }
+    );
+
+    // Apply initial hidden state and observe cards
+    document.querySelectorAll('.feature-card, .step-card, .user-card, .pricing-card').forEach(function(card) {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+/* ============================================================
+   main.css — Global Styles for BuildView 3D
+   ============================================================
+   This file contains:
+   - CSS custom properties (variables) for the colour palette
+   - Reset and base styles
+   - Custom scrollbar
+   - Reusable utility classes (buttons, cards, gradients)
+   - Loading spinner animation
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   CSS Custom Properties (Design Tokens)
+   These variables define the entire colour palette.
+   Change them here and they update everywhere.
+   ---------------------------------------------------------- */
+:root {
+  --primary: #00d4aa;           /* Teal-green accent colour */
+  --primary-dark: #00b894;      /* Darker teal for hover states */
+  --secondary: #0066cc;         /* Blue accent colour */
+  --bg-dark: #0a0e1a;           /* Darkest background (page bg) */
+  --bg-card: #111827;           /* Card/panel background */
+  --bg-surface: #1a2234;        /* Slightly lighter surface */
+  --text-primary: #f8fafc;      /* Main text colour (near white) */
+  --text-muted: #94a3b8;        /* Secondary/muted text */
+  --border: #1e2d3d;            /* Border colour */
+  --success: #22c55e;           /* Green for success states */
+  --warning: #f59e0b;           /* Amber for warnings */
+  --error: #ef4444;             /* Red for errors */
+  --radius: 12px;               /* Default border radius */
+  --radius-sm: 8px;             /* Small border radius */
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4); /* Default shadow */
+}
+
+/* ----------------------------------------------------------
+   CSS Reset & Base Styles
+   ---------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;       /* Include padding in element size */
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;      /* Smooth scrolling for anchor links */
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Import Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ----------------------------------------------------------
+   Custom Scrollbar (Webkit browsers: Chrome, Edge, Safari)
+   ---------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ----------------------------------------------------------
+   Gradient Text Utility
+   Makes text show a gradient from teal to blue.
+   Usage: <h1 class="gradient-text">Hello</h1>
+   ---------------------------------------------------------- */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ----------------------------------------------------------
+   Primary Button
+   The main call-to-action button with gradient background.
+   ---------------------------------------------------------- */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 50px;           /* Pill shape */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  /* Shine effect on hover */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);   /* Lift up slightly */
+  box-shadow: 0 8px 25px rgba(0, 212, 170, 0.35);
+  color: white;
+}
+
+.btn-primary:hover::before {
+  left: 100%;                    /* Animate the shine across */
+}
+
+.btn-primary:active {
+  transform: translateY(0);      /* Press down */
+}
+
+/* ----------------------------------------------------------
+   Secondary Button
+   An outlined button for secondary actions.
+   ---------------------------------------------------------- */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 28px;
+  background: transparent;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.15);
+}
+
+/* ----------------------------------------------------------
+   Card Component
+   A dark panel with border and padding.
+   ---------------------------------------------------------- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ----------------------------------------------------------
+   Loading Spinner
+   A spinning circle shown while data is loading.
+   Usage: <div class="spinner"></div>
+   ---------------------------------------------------------- */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 20px auto;
+}
+
+.spinner-sm {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ----------------------------------------------------------
+   Loading Overlay
+   Full-page loading state shown before content loads.
+   ---------------------------------------------------------- */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ----------------------------------------------------------
+   Status Badge
+   Coloured badge showing project status.
+   ---------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-created    { background: rgba(148,163,184,0.15); color: #94a3b8; }
+.badge-uploaded   { background: rgba(59,130,246,0.15);  color: #60a5fa; }
+.badge-analyzing  { background: rgba(245,158,11,0.15);  color: #fbbf24; }
+.badge-generating { background: rgba(139,92,246,0.15);  color: #a78bfa; }
+.badge-ready      { background: rgba(34,197,94,0.15);   color: #4ade80; }
+
+/* ----------------------------------------------------------
+   Container
+   Centres content with a max width.
+   ---------------------------------------------------------- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ----------------------------------------------------------
+   Section Spacing
+   ---------------------------------------------------------- */
+.section {
+  padding: 80px 0;
+}
+
+/* ----------------------------------------------------------
+   Section Header
+   ---------------------------------------------------------- */
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.section-header p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------
+   Alert / Notification
+   ---------------------------------------------------------- */
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.alert-success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
+/* ----------------------------------------------------------
+   Responsive Helpers
+   ---------------------------------------------------------- */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .section {
+    padding: 60px 0;
+  }
+
+  .section-header h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* ----------------------------------------------------------
+   Fade In Animation
+   ---------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* ----------------------------------------------------------
+   Gradient Border Effect
+   ---------------------------------------------------------- */
+.gradient-border {
+  position: relative;
+  border-radius: var(--radius);
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius) + 1px);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  z-index: -1;
+}

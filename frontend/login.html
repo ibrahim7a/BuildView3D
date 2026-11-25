@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In — BuildView 3D</title>
+    <meta name="description" content="Log in to your BuildView 3D account to view and manage your 3D home projects.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page">
+
+<!-- ============================================================
+     LOGIN PAGE
+     Centred card with email + password form.
+     ============================================================ -->
+<div class="auth-card">
+
+    <!-- Logo / Branding -->
+    <a href="index.html" class="auth-logo">
+        <span class="gradient-text">BuildView 3D</span>
+    </a>
+
+    <!-- Page Heading -->
+    <h1 class="auth-heading">Welcome back</h1>
+    <p class="auth-subheading">Log in to view your 3D home projects</p>
+
+    <!-- Error Message Area (hidden by default, shown by JavaScript) -->
+    <div class="error-message" id="error-message" role="alert"></div>
+
+    <!-- Login Form -->
+    <form class="auth-form" id="login-form" novalidate>
+
+        <!-- Email Field -->
+        <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label class="form-label" for="password">Password</label>
+                <a href="#" style="font-size: 0.8rem; color: var(--text-muted);"
+                   onclick="alert('Password reset will be available in a future update.'); return false;">
+                   Forgot password?
+                </a>
+            </div>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary btn-auth">
+            Log In
+        </button>
+
+    </form>
+
+    <!-- Register Link -->
+    <div class="auth-footer">
+        <span>Don't have an account?</span>
+        <a href="register.html"> Create one free →</a>
+    </div>
+
+    <!-- Back to Home -->
+    <div style="text-align: center; margin-top: 16px;">
+        <a href="index.html" style="color: var(--text-muted); font-size: 0.8rem;">
+            ← Back to BuildView 3D
+        </a>
+    </div>
+
+</div>
+
+<!-- ============================================================
+     SCRIPTS
+     Load api.js first (provides AuthAPI, etc.)
+     Then auth.js which uses those functions.
+     ============================================================ -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>

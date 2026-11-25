@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — BuildView 3D</title>
+    <meta name="description" content="Manage your 3D floor plan projects on BuildView 3D.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<!-- ============================================================
+     TOP NAVIGATION BAR
+     Fixed to the top — contains logo, user info, logout button.
+     ============================================================ -->
+<nav class="top-nav">
+    <!-- Logo -->
+    <a href="index.html" class="top-nav-logo">
+        <span class="gradient-text">BuildView 3D</span>
+    </a>
+
+    <!-- Right side: user info + logout -->
+    <div class="top-nav-right">
+        <!-- User Avatar + Info -->
+        <div class="user-info">
+            <div class="user-avatar" id="user-avatar">?</div>
+            <div>
+                <div class="user-name" id="user-name">Loading...</div>
+                <div class="user-role" id="user-role">—</div>
+            </div>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="btn-logout" onclick="logout()">
+            Log Out
+        </button>
+    </div>
+</nav>
+
+<!-- ============================================================
+     MAIN DASHBOARD LAYOUT (Sidebar + Content)
+     ============================================================ -->
+<div class="dashboard-layout">
+
+    <!-- --------------------------------------------------------
+         SIDEBAR NAVIGATION
+         -------------------------------------------------------- -->
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+
+            <span class="sidebar-label">Main</span>
+
+            <a href="#" class="sidebar-link active">
+                <span class="icon">📊</span>
+                Dashboard
+            </a>
+
+            <a href="#" class="sidebar-link" onclick="alert('Projects list coming in Phase 2!'); return false;">
+                <span class="icon">📁</span>
+                Projects
+            </a>
+
+            <span class="sidebar-label">Tools</span>
+
+            <a href="#" class="sidebar-link" onclick="alert('Floor plan upload coming in Phase 2!'); return false;">
+                <span class="icon">⬆️</span>
+                Upload Floor Plan
+            </a>
+
+            <a href="#" class="sidebar-link" onclick="alert('3D Viewer coming in Phase 2!'); return false;">
+                <span class="icon">🏠</span>
+                3D Viewer
+            </a>
+
+            <span class="sidebar-label">Account</span>
+
+            <a href="#" class="sidebar-link" onclick="alert('Settings coming in Phase 2!'); return false;">
+                <span class="icon">⚙️</span>
+                Settings
+            </a>
+
+            <a href="#" class="sidebar-link" onclick="alert('Help & documentation coming soon!'); return false;">
+                <span class="icon">❓</span>
+                Help
+            </a>
+
+        </nav>
+    </aside>
+
+    <!-- --------------------------------------------------------
+         MAIN CONTENT AREA
+         -------------------------------------------------------- -->
+    <main class="main-content">
+        <div class="content-wrapper">
+
+            <!-- Page Header: Welcome Message -->
+            <div class="page-header">
+                <h1 class="welcome-text">
+                    Welcome back, <span id="welcome-name" class="gradient-text">there</span>! 👋
+                </h1>
+                <p class="welcome-sub">Here's an overview of your BuildView 3D projects.</p>
+            </div>
+
+            <!-- --------------------------------------------------
+                 STATS ROW
+                 Three stat cards with project counts.
+                 -------------------------------------------------- -->
+            <div class="stats-row">
+                <!-- Total Projects -->
+                <div class="stat-card">
+                    <div class="stat-icon blue">📁</div>
+                    <div class="stat-info">
+                        <div class="number" id="stat-total">—</div>
+                        <div class="label">Total Projects</div>
+                    </div>
+                </div>
+
+                <!-- Ready Projects -->
+                <div class="stat-card">
+                    <div class="stat-icon green">✅</div>
+                    <div class="stat-info">
+                        <div class="number" id="stat-ready">—</div>
+                        <div class="label">Projects Ready</div>
+                    </div>
+                </div>
+
+                <!-- In Progress -->
+                <div class="stat-card">
+                    <div class="stat-icon orange">⚙️</div>
+                    <div class="stat-info">
+                        <div class="number" id="stat-progress">—</div>
+                        <div class="label">In Progress</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- --------------------------------------------------
+                 PROJECTS SECTION
+                 Shows project cards or empty state.
+                 -------------------------------------------------- -->
+            <div class="dash-section-header">
+                <h2>Your Projects</h2>
+                <!-- Create New Project Button -->
+                <button class="btn-create" onclick="handleCreateProject()">
+                    + New Project
+                </button>
+            </div>
+
+            <!-- Loading indicator -->
+            <div id="projects-loading" style="display: flex; align-items: center; justify-content: center; padding: 60px; gap: 12px; color: var(--text-muted);">
+                <div class="spinner"></div>
+                <span>Loading your projects...</span>
+            </div>
+
+            <!-- Projects Grid (filled by dashboard.js) -->
+            <div class="projects-grid" id="projects-grid" style="display: none;"></div>
+
+            <!-- Empty State (shown when no projects exist) -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <span class="empty-icon">🏗️</span>
+                <h3>No projects yet</h3>
+                <p>Upload your first floor plan and watch it come to life as a 3D model!</p>
+                <button class="btn-primary" onclick="handleCreateProject()" style="margin: 0 auto;">
+                    + Create Your First Project
+                </button>
+            </div>
+
+            <!-- --------------------------------------------------
+                 GETTING STARTED GUIDE
+                 Shown below the projects to help new users.
+                 -------------------------------------------------- -->
+            <div style="margin-top: 48px;">
+                <h2 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 20px;">
+                    🚀 Getting Started
+                </h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                    <!-- Step 1 -->
+                    <div class="card" style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 32px; height: 32px; background: rgba(0,212,170,0.15); color: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">1</div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px; font-size: 0.9rem;">Create a Project</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem;">Click "+ New Project" to get started.</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="card" style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 32px; height: 32px; background: rgba(0,102,204,0.15); color: #60a5fa; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">2</div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px; font-size: 0.9rem;">Upload Floor Plan</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem;">Upload a JPG, PNG, or PDF. (Phase 2)</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="card" style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 32px; height: 32px; background: rgba(139,92,246,0.15); color: #a78bfa; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">3</div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px; font-size: 0.9rem;">AI Generates 3D Model</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem;">Our AI builds your 3D house. (Phase 2)</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="card" style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 32px; height: 32px; background: rgba(34,197,94,0.15); color: #4ade80; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">4</div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px; font-size: 0.9rem;">Explore &amp; Share</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem;">Walk through and share your 3D model. (Phase 2)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</div>
+
+<!-- ============================================================
+     SCRIPTS
+     Load api.js first (provides isLoggedIn, AuthAPI, etc.)
+     Then dashboard.js which uses those functions.
+     ============================================================ -->
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

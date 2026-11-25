@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — BuildView 3D</title>
+    <meta name="description" content="Create your free BuildView 3D account and start transforming your floor plans into 3D models.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page">
+
+<!-- ============================================================
+     REGISTER PAGE
+     Centred card with full registration form.
+     ============================================================ -->
+<div class="auth-card">
+
+    <!-- Logo / Branding -->
+    <a href="index.html" class="auth-logo">
+        <span class="gradient-text">BuildView 3D</span>
+    </a>
+
+    <!-- Page Heading -->
+    <h1 class="auth-heading">Create your account</h1>
+    <p class="auth-subheading">Start visualising your home in 3D — free forever</p>
+
+    <!-- Error Message Area (hidden by default, shown by JavaScript) -->
+    <div class="error-message" id="error-message" role="alert"></div>
+
+    <!-- Register Form -->
+    <form class="auth-form" id="register-form" novalidate>
+
+        <!-- Full Name Field -->
+        <div class="form-group">
+            <label class="form-label" for="full-name">Full Name</label>
+            <input
+                type="text"
+                id="full-name"
+                name="full_name"
+                class="form-input"
+                placeholder="John Smith"
+                autocomplete="name"
+                required
+            >
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input"
+                placeholder="At least 6 characters"
+                autocomplete="new-password"
+                required
+                minlength="6"
+            >
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+            <label class="form-label" for="confirm-password">Confirm Password</label>
+            <input
+                type="password"
+                id="confirm-password"
+                name="confirm_password"
+                class="form-input"
+                placeholder="Repeat your password"
+                autocomplete="new-password"
+                required
+            >
+        </div>
+
+        <!-- Account Type Selection -->
+        <div class="form-group">
+            <label class="form-label">I am a...</label>
+            <div class="radio-group">
+                <!-- Homeowner option -->
+                <label class="radio-option">
+                    <input
+                        type="radio"
+                        name="account_type"
+                        value="homeowner"
+                        checked
+                    >
+                    <span class="radio-label">🏠 Homeowner</span>
+                </label>
+
+                <!-- Builder option -->
+                <label class="radio-option">
+                    <input
+                        type="radio"
+                        name="account_type"
+                        value="builder"
+                    >
+                    <span class="radio-label">🏗️ Builder / Architect</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary btn-auth">
+            Create Account
+        </button>
+
+        <!-- Terms note -->
+        <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: -8px;">
+            By creating an account you agree to our
+            <a href="#" style="color: var(--primary);">Terms of Service</a>
+            and
+            <a href="#" style="color: var(--primary);">Privacy Policy</a>.
+        </p>
+
+    </form>
+
+    <!-- Login Link -->
+    <div class="auth-footer">
+        <span>Already have an account?</span>
+        <a href="login.html"> Log in →</a>
+    </div>
+
+    <!-- Back to Home -->
+    <div style="text-align: center; margin-top: 16px;">
+        <a href="index.html" style="color: var(--text-muted); font-size: 0.8rem;">
+            ← Back to BuildView 3D
+        </a>
+    </div>
+
+</div>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>
